@@ -1,0 +1,25 @@
+{
+  "name": "cliri",
+  "version": "1.0.0",
+  "description": "Command Line API Tool that will be used to search for Song and Artist data on Spotify, movie data using OMDB and music events and concerts using Bands in Town",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DBiles/CLIRI.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DBiles/CLIRI/issues"
+  },
+  "homepage": "https://github.com/DBiles/CLIRI#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "dotenv": "^6.1.0",
+    "inquirer": "^6.2.0"
+  }
+}
