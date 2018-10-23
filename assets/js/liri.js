@@ -60,6 +60,16 @@ inquirer.prompt([
             })
             break;
         case 'Search for a movie`s info (movie-this)':
+        inquirer.prompt([
+            // Get info for the movie to be searched for
+            {
+                type: 'input',
+                name: 'moviename',
+                message: 'What movie would you like to search for ?'
+            }
+        ]).then(response => {
+            movieSearch(response.moviename)
+        })
 
             break;
         case 'Search for a concert`s info':
@@ -75,7 +85,7 @@ inquirer.prompt([
 
 function spotifySearch(song) {
 
-    if (!song) {
+    if (!song || song == '') {
         song = 'The Sign'
     }
 
@@ -90,22 +100,57 @@ function spotifySearch(song) {
             let tracks = response.tracks.items;
             // console.log(tracks)
             tracks.forEach(element => {
-                song = {}
+                songInfo = {}
 
                 // Traverse artist array
                 element.artists.forEach(element => {
-                    song.artists = element.name
+                    songInfo.artists = element.name
                 });
 
-                song.album_name = element.album.name
-                song.songtitle = element.name
-                song.urlpreview = element.external_urls.spotify
+                songInfo.album_name = element.album.name
+                songInfo.songtitle = element.name
+                songInfo.urlpreview = element.external_urls.spotify
 
                 // Do something with the object
-                console.log(song)
+                console.log(songInfo)
             });
         })
         .catch(function (err) {
             console.log(err);
         })
+}
+
+function movieSearch(movie) {
+    if (!movie || movie == '') {
+        movie = 'Mr. Nobody'
+    }
+
+    let movieUrl = `http://www.omdbapi.com/?apikey=trilogy&t=${movie}&type=movie`;
+    let movieInfo = {}
+
+    axios.get(movieUrl)
+    .then(response => {
+        console.log(response.data)
+        movieInfo.title = response.data.Title
+        movieInfo.year = response.data.Year
+        movieInfo.imdbRating = response.data.imdbRating
+
+        // Rotten Tomatoes
+        response.data.Ratings.forEach(element => {
+            // Grab Rotten Tomatoes rating
+            if (element.Source === 'Rotten Tomatoes') {
+                movieInfo.rtRating = element.Value
+            }
+        });
+
+        movieInfo.country = response.data.Country
+        movieInfo.language = response.data.Language
+        movieInfo.plot = response.data.Plot
+        movieInfo.actors = response.data.Actors
+
+        // Do something with movie object
+        console.log(movieInfo)
+    }).catch(err => {
+        console.log(err)
+    })
 }
