@@ -5,7 +5,8 @@ const axios = require('axios');
 const Spotify = require('node-spotify-api');
 const keys = require('./spotify.js');
 const spotify = new Spotify(keys.spotify);
-
+const moment = require('moment');
+const fs = require('fs');
 
 if (result.error) {
     throw result.error
@@ -52,30 +53,40 @@ inquirer.prompt([
                 // Get info for the song to be searched for
                 {
                     type: 'input',
-                    name: 'spotifysong',
+                    name: 'spotifySong',
                     message: 'What song would you like to search for ?'
                 }
             ]).then(response => {
-                spotifySearch(response.spotifysong)
+                spotifySearch(response.spotifySong)
             })
             break;
         case 'Search for a movie`s info (movie-this)':
-        inquirer.prompt([
-            // Get info for the movie to be searched for
-            {
-                type: 'input',
-                name: 'moviename',
-                message: 'What movie would you like to search for ?'
-            }
-        ]).then(response => {
-            movieSearch(response.moviename)
-        })
+            inquirer.prompt([
+                // Get info for the movie to be searched for
+                {
+                    type: 'input',
+                    name: 'movieName',
+                    message: 'What movie would you like to search for ?'
+                }
+            ]).then(response => {
+                movieSearch(response.movieName)
+            })
 
             break;
         case 'Search for a concert`s info':
-
+            inquirer.prompt([
+                // Get info for the movie to be searched for
+                {
+                    type: 'input',
+                    name: 'artistName',
+                    message: 'What movie would you like to search for ?'
+                }
+            ]).then(response => {
+                eventSearch(response.movieName)
+            })
             break;
         case 'Do what it says':
+            
 
             break;
     }
@@ -126,31 +137,64 @@ function movieSearch(movie) {
     }
 
     let movieUrl = `http://www.omdbapi.com/?apikey=trilogy&t=${movie}&type=movie`;
-    let movieInfo = {}
+    let movieInfo = {};
 
     axios.get(movieUrl)
+        .then(response => {
+            console.log(response.data)
+            movieInfo.title = response.data.Title;
+            movieInfo.year = response.data.Year;
+            movieInfo.imdbRating = response.data.imdbRating;
+
+            // Rotten Tomatoes
+            response.data.Ratings.forEach(element => {
+                // Grab Rotten Tomatoes rating
+                if (element.Source === 'Rotten Tomatoes') {
+                    movieInfo.rtRating = element.Value;
+                }
+            });
+
+            movieInfo.country = response.data.Country;
+            movieInfo.language = response.data.Language;
+            movieInfo.plot = response.data.Plot;
+            movieInfo.actors = response.data.Actors;
+
+            // Do something with movie object
+            console.log(movieInfo)
+        }).catch(err => {
+            console.log(err);
+        })
+}
+
+function eventSearch(artist) {
+    if (!artist || artist == '') {
+        artist = 'drake';
+    }
+
+    artistUrl = `https://rest.bandsintown.com/artists/${artist}/events?app_id=codingbootcamp&date=upcoming`;
+    eventInfo = {};
+
+    axios.get(artistUrl)
     .then(response => {
-        console.log(response.data)
-        movieInfo.title = response.data.Title
-        movieInfo.year = response.data.Year
-        movieInfo.imdbRating = response.data.imdbRating
+        
+        
+        console.log(response.data);
+        response.data.forEach(element => {
+            // console.log(element.venue)
+            eventInfo.artist = element.lineup[0];
+            eventInfo.venueName = element.venue.name;
+            
+            // If out of USA region will be blank.
+            if (element.venue.region === '') {
+                delete eventInfo.region;
+            } else eventInfo.region = element.venue.region;
 
-        // Rotten Tomatoes
-        response.data.Ratings.forEach(element => {
-            // Grab Rotten Tomatoes rating
-            if (element.Source === 'Rotten Tomatoes') {
-                movieInfo.rtRating = element.Value
-            }
+            eventInfo.city = element.venue.city;
+            eventInfo.date = moment(element.venue.datetime).format('L')
+            console.log(eventInfo);
         });
-
-        movieInfo.country = response.data.Country
-        movieInfo.language = response.data.Language
-        movieInfo.plot = response.data.Plot
-        movieInfo.actors = response.data.Actors
-
-        // Do something with movie object
-        console.log(movieInfo)
-    }).catch(err => {
-        console.log(err)
+    }).catch(error => {
+        console.log(error);
     })
+
 }
