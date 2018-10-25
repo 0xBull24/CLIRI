@@ -214,7 +214,6 @@ function doCommand() {
             newData = data.split(',');
 
             for (let count = 0; count <= newData.length - 1; count++) {
-                console.log(count)
                 if (newData[count].includes('spotify')) {
                     console.log('Looks like we will search for a song')
                     spotifySearch(newData[count + 1]);
