@@ -1,5 +1,5 @@
 // NPM Packages
-const result = require("dotenv").config();
+const result = require('dotenv').config();
 const inquirer = require('inquirer');
 const axios = require('axios');
 const Spotify = require('node-spotify-api');
@@ -86,8 +86,7 @@ inquirer.prompt([
             })
             break;
         case 'Do what it says':
-            
-
+            doCommand();
             break;
     }
 }).catch(error => {
@@ -141,26 +140,30 @@ function movieSearch(movie) {
 
     axios.get(movieUrl)
         .then(response => {
-            console.log(response.data)
-            movieInfo.title = response.data.Title;
-            movieInfo.year = response.data.Year;
-            movieInfo.imdbRating = response.data.imdbRating;
+            if (response.data.Response === 'False') {
+                console.log(response.data.Error)
+            } else {
+                console.log(response.data)
+                movieInfo.title = response.data.Title;
+                movieInfo.year = response.data.Year;
+                movieInfo.imdbRating = response.data.imdbRating;
 
-            // Rotten Tomatoes
-            response.data.Ratings.forEach(element => {
-                // Grab Rotten Tomatoes rating
-                if (element.Source === 'Rotten Tomatoes') {
-                    movieInfo.rtRating = element.Value;
-                }
-            });
+                // Rotten Tomatoes
+                response.data.Ratings.forEach(element => {
+                    // Grab Rotten Tomatoes rating
+                    if (element.Source === 'Rotten Tomatoes') {
+                        movieInfo.rtRating = element.Value;
+                    }
+                });
 
-            movieInfo.country = response.data.Country;
-            movieInfo.language = response.data.Language;
-            movieInfo.plot = response.data.Plot;
-            movieInfo.actors = response.data.Actors;
+                movieInfo.country = response.data.Country;
+                movieInfo.language = response.data.Language;
+                movieInfo.plot = response.data.Plot;
+                movieInfo.actors = response.data.Actors;
 
-            // Do something with movie object
-            console.log(movieInfo)
+                // Do something with movie object
+                console.log(movieInfo)
+            }
         }).catch(err => {
             console.log(err);
         })
@@ -175,26 +178,55 @@ function eventSearch(artist) {
     eventInfo = {};
 
     axios.get(artistUrl)
-    .then(response => {
-        
-        
-        console.log(response.data);
-        response.data.forEach(element => {
-            // console.log(element.venue)
-            eventInfo.artist = element.lineup[0];
-            eventInfo.venueName = element.venue.name;
-            
-            // If out of USA region will be blank.
-            if (element.venue.region === '') {
-                delete eventInfo.region;
-            } else eventInfo.region = element.venue.region;
+        .then(response => {
+            if (response.data.includes('error')) {
+                console.log('There was an error while searching for this concert event')
+            } else {
 
-            eventInfo.city = element.venue.city;
-            eventInfo.date = moment(element.venue.datetime).format('L')
-            console.log(eventInfo);
-        });
-    }).catch(error => {
-        console.log(error);
+                console.log(response.data);
+                response.data.forEach(element => {
+                    // console.log(element.venue)
+                    eventInfo.artist = element.lineup[0];
+                    eventInfo.venueName = element.venue.name;
+
+                    // If out of USA region will be blank.
+                    if (element.venue.region === '') {
+                        delete eventInfo.region;
+                    } else eventInfo.region = element.venue.region;
+
+                    eventInfo.city = element.venue.city;
+                    eventInfo.date = moment(element.venue.datetime).format('L')
+                    console.log(eventInfo);
+                })
+            };
+        }).catch(error => {
+            console.log(error);
+        })
+
+}
+
+function doCommand() {
+    fs.readFile('random.txt', 'utf8', (err, data) => {
+        if (err) {
+            console.log(err)
+        } else {
+            console.log(data);
+            newData = data.split(',');
+
+            for (let count = 0; count <= newData.length - 1; count++) {
+                console.log(count)
+                if (newData[count].includes('spotify')) {
+                    console.log('Looks like we will search for a song')
+                    spotifySearch(newData[count + 1]);
+                    count++;
+                } else if (newData[count].includes('movie')) {
+                    movieSearch(newData[count + 1]);
+                    count++;
+                } else if (newData[count].includes('concert')) {
+                    eventSearch(newData[count + 1]);
+                    count++;
+                }
+            }
+        }
     })
-
 }
