@@ -34,34 +34,26 @@ node assets\js\liri.js
 
 This command will present you with a prompt like so:
 
-![prompt image](https://cl.ly/becacfa333c2)
+![prompt image](https://cl.ly/becacfa333c2/Image%202018-10-25%20at%2011.38.02%20PM.png)
+
+When asked what to search for from the given prompt type in whatever you would like. Ex.
+
+* Search for a song's info - Mob Ties
+* Search for a movie's info - Men In Black
+* Search for a concert's info - Drake
+
+These would all result in some info regarding the given request. If nothing is given for the input the application has defaults for the request to go grab.
+
+![SamplePrompt](https://cl.ly/992bade78d39/Screen%20Recording%202018-10-25%20at%2011.55.08.90%20PM.gif)
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+* [dotENV](https://www.npmjs.com/package/dotenv) - Env files done easy
+* [Axios](https://www.npmjs.com/package/axios) - HTTP Request
+* [Inquirer](https://www.npmjs.com/package/inquirer) - Command Line Prompt
+* [Moment](https://www.npmjs.com/package/moment) - Time Conversion
+* [Spotify](https://www.npmjs.com/package/spotify) - Node Spotify API
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+* **Darron Biles** - [PurpleBooth](https://github.com/DBiles)
