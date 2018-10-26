@@ -1,3 +1,67 @@
 # CLIRI
 
 Command Line API Tool that will be used to search for Song and Artist data on Spotify, movie data using OMDB and music events and concerts using Bands in Town
+
+## Prerequisites
+
+Make sure you have node installed [Node](https://nodejs.org/en/) for your given platform (Mac OSX, Windows, Linux)
+Once you have installed open a shell and run the following command
+
+```bash
+node -v
+```
+
+### Installing
+
+Now that we have node installed lets install all the dependencies by running the following command from the root folder for this project
+
+```bash
+npm install
+```
+
+## Running the application
+
+This application works in 2 ways:
+
+1. Command line prompt
+2. Text file titled `random.txt` in the root folder
+
+In order to run the application just use the following:
+
+```node
+node assets\js\liri.js
+```
+
+This command will present you with a prompt like so:
+
+![prompt image](https://cl.ly/becacfa333c2)
+
+## Built With
+
+* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
+* [Maven](https://maven.apache.org/) - Dependency Management
+* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+
+## Contributing
+
+Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+
+## Versioning
+
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+
+## Authors
+
+* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+
+See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Acknowledgments
+
+* Hat tip to anyone whose code was used
+* Inspiration
+* etc
